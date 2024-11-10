@@ -58,5 +58,3 @@ export default tseslint.config({
   },
 })
 ```
-# todolist
-# todolist

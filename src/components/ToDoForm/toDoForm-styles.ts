@@ -11,7 +11,6 @@ const Form = styled.form`
     padding: 20px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease-in-out;
-    
 `
 
 const Input = styled.input`
