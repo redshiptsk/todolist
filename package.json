@@ -11,10 +11,13 @@
   },
   "dependencies": {
     "@mobx-devtools/tools": "^0.0.4",
+    "@siberiacancode/reactuse": "^0.0.72",
     "@types/styled-components": "^5.1.34",
+    "i": "^0.3.7",
     "mobx": "^6.13.5",
     "mobx-react": "^9.1.1",
     "mobx-react-lite": "^4.0.7",
+    "npm": "^10.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "styled-components": "^6.1.13"

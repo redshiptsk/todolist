@@ -1,4 +1,4 @@
-import './App.css'
+
 import { ToDoHeader } from './components/Header/Header'
 import List from './components/List/List'
 import ToDoForm from './components/ToDoForm/ToDoForm'

@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { toDosStore } from '../../../stores'
 import { Form, Input, Button } from './toDoForm-styles'
@@ -16,7 +15,7 @@ const ToDoForm = observer(() => {
         setValue(e.target.value);
     }
 
-    const handleSubmit: React.ChangeEventHandler = (e) => {
+    const handleSubmit = (e:React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         toDosStore.addToDo({
             data: {

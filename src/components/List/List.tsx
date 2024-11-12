@@ -1,24 +1,34 @@
-import { FunctionComponent, useEffect } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { toDosStore } from '../../../stores';
 import { Container, ListContainer, Button, ListItem, GreenListItem, RedButton, ButtonsBlock } from './list-styles'
 import { observer } from 'mobx-react-lite';
-
-
-
-
-
+import { useIntersectionObserver } from '@siberiacancode/reactuse';
 const List: FunctionComponent = observer(() => {
-
-
+    const [page, setPage] = useState(10);
+    
     useEffect(() => {
-        toDosStore.getToDos()
-    }, [])
+        toDosStore.getToDos(page)
+    }, [page])
 
-    const { data } = toDosStore.toDos
+    const { ref } = useIntersectionObserver<HTMLDivElement>({
+        threshold: 1,
+        onChange: (entry) => {
+            if (entry.isIntersecting) {
+                setPage((prev) => prev + 10)
+                toDosStore.setPageSize()
+            };
+        },
+    });
+    const { data, meta } = toDosStore.toDos; 
+    const allLoaded = (meta.pagination.pageSize >= meta.pagination.total);
+
+
+    
     return (
 
         <Container>
             <ListContainer>
+
                 {data ? toDosStore.toDos.data.map((item) => (
                     (item.attributes.status !== 'done') ? <ListItem key={item.id} >
                         {item.attributes.name}
@@ -35,29 +45,13 @@ const List: FunctionComponent = observer(() => {
                             </ButtonsBlock>
 
                         </GreenListItem>
-                )): <></>}
+                )) : <></>}
+                { allLoaded? <div>Загружены все задачи</div> : <div ref={ref}>Loading...</div>} 
+
             </ListContainer>
+
         </Container>
     )
-})/* 
-export function List()  {
-
-    return (
-
-        <Container>
-            <ListContainer>
-                {toDosStore.getToDos().map((item) => (
-                    toDosStore.toDos ? <ListItem key={item.id} >
-                        {item.attributes.name} <Button onClick={() => { toDosStore.toggleToDo(item.id) }}>Выполнено</Button>
-                    </ListItem> :
-                        <GreenListItem key={item.id}>
-                            {item.attributes.name} <Button onClick={() => { toDosStore.toggleToDo(item.id) }}>Отменить</Button>
-                        </GreenListItem>
-                ))}
-            </ListContainer>
-        </Container>
-    )
-
-} */
+})
 
 export default List;

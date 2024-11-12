@@ -14,7 +14,7 @@ interface IToDoItem {
             favorite?: boolean
         }
     }[],
-    meta?: {
+    meta: {
         pagination: {
             page: number,
             pageSize: number,
@@ -25,11 +25,29 @@ interface IToDoItem {
 
 }
 
-
+type newItem = {
+    data: {
+        name: string,
+        description: string,
+        status: string,
+    }
+}
 
 class ToDosStore {
 
-    toDos: IToDoItem = { data: [] }
+    toDos: IToDoItem = {
+        data: [], meta: {
+            pagination: {
+                page: 0,
+                pageSize: 0,
+                pageCount: 0,
+                total: 0
+            }
+        }
+    };
+    page = {
+        size: 0,
+    }
 
     constructor() {
         makeObservable(this, {
@@ -41,7 +59,10 @@ class ToDosStore {
         })
     }
 
-    async addToDo(todo: IToDoItem) {
+    setPageSize() {
+        this.page.size = this.page.size + 10;
+    }
+    async addToDo(todo: newItem) {
         await fetch('https://cms.laurence.host/api/tasks',
             {
                 method: 'POST',
@@ -53,7 +74,7 @@ class ToDosStore {
 
 
             })
-        this.getToDos()
+        this.getToDos(this.page.size)
     }
     async removeToDo(id: number) {
         await fetch(`https://cms.laurence.host/api/tasks/${id}`,
@@ -64,13 +85,17 @@ class ToDosStore {
                 }
             })
 
-        this.getToDos()
+        this.getToDos(this.page.size)
     }
 
     async toggleToDo(id: number) {
         const task = this.toDos.data.filter(todo => {
             if (todo.id === id) {
-                return { data: { status: todo.attributes.status = 'done', name: todo.attributes.name, description: todo.attributes.description } }
+                if (todo.attributes.status === 'done') {
+                    return { data: { status: todo.attributes.status = 'open', name: todo.attributes.name, description: todo.attributes.description } }
+                } else {
+                    return { data: { status: todo.attributes.status = 'done', name: todo.attributes.name, description: todo.attributes.description } }
+                }
             }
         }
         );
@@ -90,16 +115,17 @@ class ToDosStore {
                 },
                 body: JSON.stringify(data)
             })
-        this.getToDos()
+        this.getToDos(this.page.size)
     }
-    async getToDos() {
-        const todos = await fetch(`https://cms.laurence.host/api/tasks`,
+    async getToDos(pageSize: number) {
+        const todos = await fetch(`https://cms.laurence.host/api/tasks?&pagination%5BpageSize%5D=${pageSize}`,
             {
                 headers: {
                     'Authorization': `${globalStore.token}`,
                 },
             }
         )
+
         this.toDos = await todos.json()
     }
 
