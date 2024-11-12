@@ -1,8 +1,7 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import { toDosStore } from '../../../stores';
 import { Container, ListContainer, Button, ListItem, GreenListItem, RedButton, ButtonsBlock } from './list-styles'
 import { observer } from 'mobx-react-lite';
-import { useIntersectionObserver, useQuery } from "@siberiacancode/reactuse";
 
 
 

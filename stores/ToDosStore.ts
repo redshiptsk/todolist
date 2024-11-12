@@ -1,6 +1,5 @@
 import { action, makeObservable, observable } from "mobx";
 import { globalStore } from '../stores';
-import { useState } from "react";
 
 interface IToDoItem {
     data: {
@@ -48,24 +47,24 @@ class ToDosStore {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `${globalStore.jwt}`,
+                    'Authorization': `${globalStore.token}`,
                 },
                 body: JSON.stringify(todo),
 
 
             })
-        this.getToDos(1)
+        this.getToDos()
     }
     async removeToDo(id: number) {
         await fetch(`https://cms.laurence.host/api/tasks/${id}`,
             {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `${globalStore.jwt}`,
+                    'Authorization': `${globalStore.token}`,
                 }
             })
 
-        this.getToDos(1)
+        this.getToDos()
     }
 
     async toggleToDo(id: number) {
@@ -87,17 +86,17 @@ class ToDosStore {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `${globalStore.jwt}`,
+                    'Authorization': `${globalStore.token}`,
                 },
                 body: JSON.stringify(data)
             })
-        this.getToDos(1)
+        this.getToDos()
     }
     async getToDos() {
         const todos = await fetch(`https://cms.laurence.host/api/tasks`,
             {
                 headers: {
-                    'Authorization': `${globalStore.jwt}`,
+                    'Authorization': `${globalStore.token}`,
                 },
             }
         )
