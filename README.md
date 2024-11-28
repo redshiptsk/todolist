@@ -4,7 +4,7 @@
 !!!
 !!!!
 !!!!!
-######"npm run dev" to start
+######"npm run start" to start
 !!!!!
 !!!!
 !!!
